@@ -6,8 +6,7 @@
 
 1. 打开 `chrome://extensions/`，启用右上角「开发者模式」。
 2. 点击「加载已解压的扩展程序」，选择本仓库目录。
-3. **如果已安装商店版「小红书剪贴板图片上传」，请先禁用它**，避免两个扩展同时注入。
-4. 刷新小红书发布页。
+3. 刷新小红书发布页。
 
 ## 使用
 
@@ -32,13 +31,7 @@
 
 > 示意图基于模拟页面截取，实际界面以小红书创作服务平台为准。
 
-## 微信图片兼容：问题与修复
-
-### 问题
-
-商店版扩展点击「粘贴图片」时，微信复制的图片会报错「剪贴板里没有 PNG、JPG 或 WebP 图片」，但直接 `⌘V` 却可以上传。
-
-### 根因
+## 微信图片兼容原理
 
 微信 Mac 复制聊天图片时，剪贴板里同时写入了**文件引用**（`public.file-url`，指向微信缓存中的 `.jpg`）和多种图片格式（TIFF/PNG/JPEG…）。
 
@@ -46,16 +39,14 @@ Chromium 在 macOS 上的类型探测逻辑（`ui/base/clipboard/clipboard_mac.m
 
 > 剪贴板含 `public.file-url` 时，只暴露 `text/uri-list`，**故意忽略图片**（兼容 Finder 复制文件的行为，crbug.com/553686）。
 
-因此 `navigator.clipboard.read()` 拿不到任何 `image/*` 类型，按钮路径失败；而 paste 事件走另一条代码路径（`ReadFiles`），会携带真实文件，所以 `⌘V` 正常。
+因此 `navigator.clipboard.read()` 拿不到任何 `image/*` 类型，而 paste 事件走另一条代码路径（`ReadFiles`），会携带真实文件。
 
-### 修复
-
-按钮点击改为两级读取：
+为此，按钮点击采用两级读取：
 
 1. **异步剪贴板 API**（`navigator.clipboard.read()`）——常规截图等场景；
 2. **粘贴桥**：拿不到图片类型时，聚焦一个隐藏的 `contenteditable` 元素并执行 `document.execCommand("paste")`（扩展持有 `clipboardRead` 权限），触发与 `⌘V` 完全相同的 paste 事件，从中提取真实文件后注入。
 
-页面 `⌘V` 路径保持不变，作为兜底始终可用。
+页面 `⌘V` 路径作为兜底始终可用。
 
 ## 实现结构
 
