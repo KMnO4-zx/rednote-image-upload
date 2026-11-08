@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "小红书剪贴板图片上传（微信兼容版）",
+  "version": "0.2.0",
+  "description": "将系统剪贴板中的图片直接添加到小红书创作服务平台，支持微信复制的图片。",
+  "permissions": ["clipboardRead"],
+  "content_scripts": [
+    {
+      "matches": ["https://creator.xiaohongshu.com/publish/*"],
+      "js": ["src/content.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "assets/icon-16.png",
+    "32": "assets/icon-32.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  }
+}

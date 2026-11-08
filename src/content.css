@@ -1,0 +1,152 @@
+/* rednote-image-upload — 注入按钮与提示条样式 */
+
+#xhs-clipboard-upload-button.xhs-clipboard-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 120px;
+  height: 40px;
+  flex: 0 0 120px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 20px;
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.85);
+  box-shadow: none;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button:hover {
+  background: #fff7f8;
+  color: #ff2442;
+  box-shadow: 0 0 0 1px rgba(255, 36, 66, 0.2);
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button:active {
+  transform: translateY(1px);
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button:focus-visible {
+  outline: 2px solid rgba(255, 36, 66, 0.45);
+  outline-offset: 2px;
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button:disabled {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.38);
+  cursor: wait;
+  transform: none;
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button[data-state="loading"] svg {
+  animation: xhs-clipboard-pulse 900ms ease-in-out infinite alternate;
+}
+
+#xhs-clipboard-upload-button .xhs-clipboard-button-label {
+  white-space: nowrap;
+}
+
+/* 初始上传页：按钮组允许换行，避免挤压原有按钮 */
+.image-upload-buttons[data-xhs-clipboard-enhanced="true"] {
+  width: auto !important;
+  max-width: 100%;
+  flex-wrap: wrap !important;
+  justify-content: center;
+}
+
+/* 图片编辑页：与加号入口一致的方形卡片 */
+#xhs-clipboard-upload-button.xhs-clipboard-button--editor {
+  width: 82px;
+  min-width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
+  flex-direction: column;
+  gap: 6px;
+  margin-right: 8px;
+  margin-left: 0;
+  padding: 10px 6px;
+  border-radius: 8px;
+  background: #fff7f8;
+  color: #ff2442;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button--editor:hover {
+  background: #ffeff1;
+}
+
+#xhs-clipboard-upload-button.xhs-clipboard-button--editor svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* 顶部提示条 */
+#xhs-clipboard-upload-toast.xhs-clipboard-toast {
+  position: fixed;
+  z-index: 2147483647;
+  top: 28px;
+  left: 50%;
+  box-sizing: border-box;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 10px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -8px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+#xhs-clipboard-upload-toast.xhs-clipboard-toast[data-tone="error"] {
+  border-color: rgba(196, 35, 55, 0.18);
+  background: #fff7f8;
+  color: #c42337;
+}
+
+#xhs-clipboard-upload-toast.xhs-clipboard-toast.xhs-clipboard-toast-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes xhs-clipboard-pulse {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #xhs-clipboard-upload-button.xhs-clipboard-button,
+  #xhs-clipboard-upload-toast.xhs-clipboard-toast {
+    transition: none;
+  }
+
+  #xhs-clipboard-upload-button.xhs-clipboard-button[data-state="loading"] svg {
+    animation: none;
+  }
+}
